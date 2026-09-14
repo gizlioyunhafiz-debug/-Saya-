@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#061323">
+<title>Λύκειο — Countdown</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#061323;color:#eef4ff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.wrap{max-width:920px;margin:auto;padding:34px 22px 28px}
+header{display:flex;align-items:center;gap:22px;padding:4px 0 25px;border-bottom:2px solid #19385c}
+.logo{font-size:58px}.eyebrow{font-size:18px;color:#8ea7d1;font-weight:600}.title{font-size:42px;font-weight:800;margin:0 0 4px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:28px}
+.card,.timer,.holidays{border:2px solid #164a7d;border-radius:22px;background:linear-gradient(145deg,#081a2e,#071525);padding:28px}
+.card.green{border-color:#145d61}.label{font-size:25px;font-weight:750;color:#edf3ff}.num{font-size:82px;line-height:1;font-weight:850;margin:25px 0 8px}.unit{font-size:18px;color:#8ea7d1;font-weight:700;letter-spacing:1px}
+.timer{margin-top:22px;border-color:#4c3ac0}.timer h2,.holidays h2{margin:0 0 22px;font-size:28px}.timegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.time{text-align:center;font-size:46px;font-weight:800}.time small{display:block;font-size:13px;color:#8ea7d1;letter-spacing:1px;margin-top:5px}
+.holidays{margin-top:22px;border-color:#193b61}.holiday{display:flex;justify-content:space-between;gap:20px;padding:18px 0;border-bottom:1px solid #183653;font-size:18px}.holiday:last-child{border:0}.date{color:#9db4da;text-align:right}
+.note{color:#8098bf;font-size:14px;line-height:1.5;margin:18px 4px}.by{text-align:center;border-top:2px solid #19385c;margin-top:28px;padding-top:22px;color:#7189b2;font-size:15px;font-weight:600}
+@media(max-width:650px){.wrap{padding:24px 14px}.grid{grid-template-columns:1fr}.title{font-size:34px}.logo{font-size:46px}.card,.timer,.holidays{padding:22px}.num{font-size:68px}.time{font-size:30px}.holiday{font-size:15px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="logo">🎓</div><div><div class="title">Λύκειο</div><div class="eyebrow">Μέχρι να κλείσουν τα σχολεία</div></div></header>
+
+<div class="grid">
+<section class="card"><div class="label">📅 Εβδομάδες που απομένουν</div><div class="num" id="weeks">—</div><div class="unit">ΕΒΔΟΜΑΔΕΣ</div></section>
+<section class="card green"><div class="label">📖 Σχολικές ημέρες που απομένουν</div><div class="num" id="schoolDays">—</div><div class="unit">ΗΜΕΡΕΣ</div></section>
+</div>
+
+<section class="timer">
+<h2>◷ Υπόλοιπος χρόνος</h2>
+<div class="timegrid">
+<div class="time" id="days">—<small>ΗΜΕΡΕΣ</small></div>
+<div class="time" id="hours">—<small>ΩΡΕΣ</small></div>
+<div class="time" id="mins">—<small>ΛΕΠΤΑ</small></div>
+<div class="time" id="secs">—<small>ΔΕΥΤΕΡΟΛΕΠΤΑ</small></div>
+</div>
+</section>
+
+<section class="holidays">
+<h2>📅 Σχολικές αργίες</h2>
+<div class="holiday"><span>Χριστουγεννιάτικες διακοπές</span><span class="date">23 Δεκεμβρίου 2026 –<br>7 Ιανουαρίου 2027</span></div>
+<div class="holiday"><span>Πασχαλινές διακοπές</span><span class="date">26 Απριλίου 2027 –<br>9 Μαΐου 2027</span></div>
+</section>
+
+<div class="note">ⓘ Δεν υπολογίζονται τα Σαββατοκύριακα και οι επίσημες σχολικές αργίες.</div>
+<div class="by">by Talo</div>
+</div>
+
+<script>
+const target = new Date("2027-05-15T00:00:00+03:00");
+const holidays = [
+  [new Date("2026-12-23T00:00:00+03:00"), new Date("2027-01-07T23:59:59+03:00")],
+  [new Date("2027-04-26T00:00:00+03:00"), new Date("2027-05-09T23:59:59+03:00")]
+];
+function isHoliday(d){return holidays.some(([a,b])=>d>=a&&d<=b)}
+function schoolDaysLeft(){
+  let d=new Date(), end=new Date(target), n=0;
+  d.setHours(0,0,0,0); end.setHours(0,0,0,0);
+  while(d<end){
+    const day=d.getDay();
+    if(day!==0&&day!==6&&!isHoliday(d)) n++;
+    d.setDate(d.getDate()+1);
+  }
+  return n;
+}
+function tick(){
+  const now=new Date(), ms=Math.max(0,target-now), s=Math.floor(ms/1000);
+  document.getElementById("days").firstChild.textContent=Math.floor(s/86400);
+  document.getElementById("hours").firstChild.textContent=String(Math.floor((s%86400)/3600)).padStart(2,"0");
+  document.getElementById("mins").firstChild.textContent=String(Math.floor((s%3600)/60)).padStart(2,"0");
+  document.getElementById("secs").firstChild.textContent=String(s%60).padStart(2,"0");
+  const sd=schoolDaysLeft();
+  document.getElementById("schoolDays").textContent=sd;
+  document.getElementById("weeks").textContent=Math.floor(sd/5);
+}
+tick(); setInterval(tick,1000);
+</script>
+</body>
+</html>
