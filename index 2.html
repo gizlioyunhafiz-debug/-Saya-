@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08111f">
+<title>Αντίστροφη μέτρηση Λυκείου 🇬🇷</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(145deg,#07101d,#12345a);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;display:flex;align-items:center;justify-content:center;padding:18px}.card{width:min(430px,100%);text-align:center;padding:30px 16px;border-radius:30px;background:rgba(7,12,21,.84);border:1px solid rgba(255,255,255,.12);box-shadow:0 22px 70px rgba(0,0,0,.4)}.flag{font-size:50px}.school{font-size:13px;letter-spacing:4px;opacity:.6;margin-top:6px}h1{font-size:29px;line-height:1.1;margin:18px 0 6px}.sub{opacity:.6;font-size:14px;margin-bottom:20px}.weekInfo{font-size:21px;font-weight:800;padding:14px;border-radius:18px;background:rgba(255,255,255,.08);margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.box{background:rgba(255,255,255,.07);border-radius:16px;padding:14px 2px}.num{font-size:29px;font-weight:800}.label{font-size:9px;letter-spacing:.5px;opacity:.55;margin-top:5px}.date{font-size:11px;opacity:.4;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="card">
+<div class="flag">🇬🇷</div>
+<div class="school">ΛΥΚΕΙΟ</div>
+<h1>Μέχρι να κλείσουν τα σχολεία</h1>
+<div class="sub">Ελλάδα • Λύκειο</div>
+<div class="weekInfo">⏳ <span id="weeks">--</span> ΕΒΔΟΜΑΔΕΣ ΑΠΟΜΕΝΟΥΝ</div>
+<div class="grid">
+<div class="box"><div class="num" id="days">--</div><div class="label">ΗΜΕΡΕΣ</div></div>
+<div class="box"><div class="num" id="hours">--</div><div class="label">ΩΡΕΣ</div></div>
+<div class="box"><div class="num" id="minutes">--</div><div class="label">ΛΕΠΤΑ</div></div>
+<div class="box"><div class="num" id="seconds">--</div><div class="label">ΔΕΥΤΕΡΟΛΕΠΤΑ</div></div>
+</div>
+<div class="date">Ημερομηνία στόχου: 15 Μαΐου 2027</div>
+</div>
+<script>
+const target=new Date("2027-05-15T00:00:00").getTime();
+function update(){
+ const diff=Math.max(0,target-Date.now()), total=Math.floor(diff/1000), days=Math.floor(total/86400);
+ document.getElementById("weeks").textContent=Math.floor(days/7);
+ document.getElementById("days").textContent=days;
+ document.getElementById("hours").textContent=String(Math.floor(total%86400/3600)).padStart(2,"0");
+ document.getElementById("minutes").textContent=String(Math.floor(total%3600/60)).padStart(2,"0");
+ document.getElementById("seconds").textContent=String(total%60).padStart(2,"0");
+}
+update();setInterval(update,1000);
+</script>
+</body>
+</html>
